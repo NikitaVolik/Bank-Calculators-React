@@ -1,0 +1,154 @@
+*
+  box-sizing: border-box
+  margin: 0
+  padding: 0
+
+html
+  font-family: 'OpenSans', sans-serif
+  font-size: 16px
+  line-height: 1.5
+
+h1
+  font-size: 32px
+  font-style: normal
+  font-weight: 500
+  line-height: 40px
+
+h2
+  font: 500 28px / 1.3 OpenSans, Helvetica Neue, Helvetica, Arial, sans-serif
+
+h3
+  font-size: 18px
+  font-style: normal
+  font-weight: 400
+  line-height: 26px
+
+select
+  padding: 16px 16px 16px 13px
+
+input, select
+  padding: 16px
+  font: 500 15px / 1.3 OpenSans, Helvetica Neue, Helvetica, Arial, sans-serif
+  border: 1px solid #2626263d
+  border-radius: 4px
+  &:focus-visible
+    outline: none
+    border: 1px solid #262626
+
+label
+  font: 500 13px / 1.2 OpenSans, Helvetica Neue, Helvetica, Arial, sans-serif
+
+button
+  border-radius: 8px
+  font: 500 16px / 1.25 OpenSans, Helvetica Neue, Helvetica, Arial, sans-serif
+  padding: 14px 32px
+  border: 2px solid #148F2B
+  align-self: center
+
+  &:hover
+    cursor: pointer
+
+.container
+  width: 90%
+  margin: 0 auto
+
+.gray-bg
+  background-color: #f2f5f7
+  padding: 48px 0
+
+.green-button
+  background-color: #148F2B
+  color: white
+
+.orange-button
+  background-color: white
+  color: #e35502
+  border-color: #e35502
+
+.close-btn
+  background-color: white
+  color: #e35502
+  border-color: #e35502
+
+  &:hover
+    background-color: #e35502
+    color: white
+
+.column
+  display: flex
+  flex-direction: column
+
+.bordered
+  border: 1px solid #26262614
+  border-radius: 20px
+  box-shadow: 0 1px 2px #2626260a, 0 2px 4px #26262629
+  padding: 36px
+  margin: 32px auto
+
+.big-text
+  font: 400 42px / 1.3 OpenSans, Helvetica Neue, Helvetica, Arial, sans-serif
+
+.input-width
+  width: 100%
+
+.input-line
+  display: flex
+  flex-direction: column
+  width: 100%
+  justify-content: space-between
+  gap: 8px
+  padding: 16px 0
+
+.calculator
+  display: flex
+  flex-direction: column
+  width: 100%
+  gap: 20px
+
+.input-lines
+  display: flex
+  flex-direction: column
+  gap: 20px
+
+.error-text
+  color: red
+
+.info-text
+  color: #c0c0c0
+
+.modal-overlay
+  display: flex
+  justify-content: center
+  align-items: center
+  position: fixed
+  width: 100vw
+  height: 100vh
+  top: 0
+  left: 0
+  background-color: #000000aa
+
+  input
+    width: 100%
+
+.modal
+  background-color: white
+
+  h2
+    margin-bottom: 32px
+
+  form
+    display: flex
+    flex-direction: column
+    gap: 24px
+
+.wrapper
+  display: flex
+  justify-content: space-between
+  gap: 130px
+
+@media screen and (max-width: 768px)
+  .bordered
+    padding: 36px 20px
+
+  .big-text
+    font-size: 36px

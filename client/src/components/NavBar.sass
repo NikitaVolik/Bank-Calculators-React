@@ -1,0 +1,92 @@
+nav
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+
+a
+  color: #878b90
+  text-decoration: none
+
+  &:hover
+    color: #2c3136
+    cursor: pointer
+
+.active-link
+  color: #2c3136
+
+.nav-area
+  display: flex
+  justify-content: space-between
+  align-items: center
+  height: 52px
+
+.menu, .items
+  display: flex
+  align-items: center
+  gap: 20px
+
+.line
+  width: 100%
+
+.nav-button
+  background-color: white
+  border: 1px solid #c0c0c0
+  border-radius: 4px
+  padding: 5px 15px
+
+  &:hover
+    background-color: #148F2B
+    color: white
+    border-color: #148F2B
+
+.log-out.nav-button
+  color: #e35502
+  border: 1px solid #e35502
+
+  &:hover
+    color: white
+    background-color: #e35502
+
+.burger
+  display: none
+
+@media screen and (max-width: 768px)
+  .logo
+    z-index: 1000
+
+  .menu-wrapper
+    display: flex
+    flex-direction: column
+    position: absolute
+    top: 4px
+    left: 0
+    width: 100%
+    padding: 0 5%
+    background-color: white
+    border-bottom: 1px solid #148F2B
+
+  .burger
+    display: block
+
+  button.burger
+    border: 0
+    background-color: transparent
+    color: #148F2B
+    padding-left: 0
+    padding-right: 0
+    align-self: flex-end
+
+  .nav-button
+    margin-bottom: 40px
+
+  .menu
+    display: none
+
+    &.open
+      display: flex
+      flex-direction: column
+
+  .items
+    display: flex
+    flex-direction: column
