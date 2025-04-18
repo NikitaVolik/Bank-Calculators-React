@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { calculateDeposit, fetchDepositTypes } from "../server-api"
 import DepositForm from "./DepositForm"
 import DepositResults from "./DepositResults"
+import { handleClickGA } from "./GA"
+import { Helmet } from "react-helmet-async"
 
 const DepositCalculator = () => {
     const [calculators, setCalculators] = useState([])
@@ -51,7 +53,11 @@ const DepositCalculator = () => {
         setLoading(true)
         setError(null)
 
-        console.log(typeof(depositData.amount), depositData.amount)
+        handleClickGA({
+            category: 'DepositCalculator',
+            action: 'CalculateDeposit Click',
+            label: 'CalculateDeposit Button'
+        })
 
         calculateDeposit(selectedType, depositData.amount, depositData.termYears)
             .then((data) => {
@@ -69,6 +75,12 @@ const DepositCalculator = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Депозитный калькулятор - расчёт депозита онлайн</title>
+                <meta name='description' content='Узнайте доходность и итоговую сумму вашего вклада'/>
+                <meta property="og:title" content='Депозитный калькулятор онлайн' />
+                <meta property='og:description' content='Быстрый расчёт доходов и итоговых сумм депозитов в вашем браузере.' />
+            </Helmet>
             <div className="gray-bg">
                 <div className="container">
                     <h1>Калькулятор вкладов</h1>

@@ -17,6 +17,8 @@ import {
     updateDepositType
 } from "../server-api.js"
 import "./AdminPanel.sass"
+import { handleClickGA } from "./GA.js"
+import { Helmet } from "react-helmet-async"
 
 // const API_BASE_URL = process.env.REACT_APP_API_URL + process.env.REACT_APP_API_ENDPOINT
 
@@ -66,11 +68,16 @@ const AdminPanel = () => {
     */
     
     const handleAddLoan = async () => {
+        handleClickGA({
+            category: 'AdminPanel',
+            action: 'Add Loan',
+            label: 'Add Loan'
+        })
+
         if (!newLoan.loanType || !newLoan.name || !newLoan.description || !newLoan.annualRate) {
             setAddError("Заполните все поля")
             return
-        } 
-        // console.log(newLoan)
+        }
         try {
             const loanToSend = {...newLoan, annualRate: Number(newLoan.annualRate)}
             await addLoanType(loanToSend, token)
@@ -85,12 +92,17 @@ const AdminPanel = () => {
     }
 
     const handleAddDeposit = async () => {
+        handleClickGA({
+            category: 'AdminPanel',
+            action: 'Add Deposit',
+            label: 'Add Deposit'
+        })
+
         if (!newDeposit.depositType || !newDeposit.name || !newDeposit.description || !newDeposit.annualRate || 
             newDeposit.fixedTermMonths === undefined || newDeposit.fixedTermMonths === null) {
             setAddError("Заполните все поля")
             return
         }
-        // console.log(newLoan)
         try {
             const depositToSend = {...newDeposit, annualRate: Number(newDeposit.annualRate), fixedTermMonths: Number(newDeposit.fixedTermMonths) || 0}
             await addDepositType(depositToSend, token)
@@ -105,6 +117,12 @@ const AdminPanel = () => {
     }
 
     const handleDeleteLoan = async (loanType) => {
+        handleClickGA({
+            category: 'AdminPanel',
+            action: 'Delete Loan',
+            label: 'Delete Loan'
+        })
+
         try {
             await deleteLoanType(loanType, token)
             setLoanTypes(loanTypes.filter((loan) => loan.loanType !== loanType))
@@ -114,6 +132,12 @@ const AdminPanel = () => {
     }
 
     const handleDeleteDeposit = async (depositType) => {
+        handleClickGA({
+            category: 'AdminPanel',
+            action: 'Delete Deposit',
+            label: 'Delete Deposit'
+        })
+
         try {
             await deleteDepositType(depositType, token)
             setDepositTypes(depositTypes.filter((deposit) => deposit.depositType !== depositType))
@@ -123,6 +147,12 @@ const AdminPanel = () => {
     }
 
     const handleUpdateLoan = async (updatedLoan) => {
+        handleClickGA({
+            category: 'AdminPanel',
+            action: 'Update Loan',
+            label: 'Update Loan'
+        })
+
         try {
             await updateLoanType(updatedLoan, token)
             const updatedLoans = await fetchLoanTypes()
@@ -134,15 +164,18 @@ const AdminPanel = () => {
     }
 
     const handleUpdateDeposit = async (updatedDeposit) => {
+        handleClickGA({
+            category: 'AdminPanel',
+            action: 'Update Deposit',
+            label: 'Update Deposit'
+        })
+
         try {
-            console.log('handleUpdateDeposit +')
             await updateDepositType(updatedDeposit, token)
-            console.log('handleUpdateDeposit -')
             const updatedDeposits = await fetchDepositTypes()
             setDepositTypes(updatedDeposits)
             setEditDeposit(null)
         } catch (err) {
-            console.error("Ошибка в handleUpdateDeposit", err)
             setAddError("Ошибка обновления депозита")
         }
     }
@@ -164,6 +197,9 @@ const AdminPanel = () => {
 
     return (
         <div className="container admin-panel">
+            <Helmet>
+                <title>Панель администратора</title>
+            </Helmet>
             <h2>Панель администратора</h2>
             {error && <p className="error-text">{error}</p>}
 

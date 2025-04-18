@@ -12,6 +12,23 @@ const usersFilePath = path.resolve("./data/users.json")
 const SECRET_KEY = "nkoxdz_DU5svYbWlvymHKBueMo7kF842zWIXkr0fs_oOrq6Pm6"
 const SALT_ROUNDS = 10
 
+const loginAttempts = {}
+const MAX_ATTEMPTS = 5
+const BLOCK_TIME = 300 // в секундах 5 минут
+
+function recordFiledAttempt(login) {
+    if (!loginAttempts[login]) {
+        loginAttempts[login] = {count: 1}
+    } else {
+        loginAttempts[login].count += 1
+    }
+
+    if (loginAttempts[login].count >= MAX_ATTEMPTS) {
+        loginAttempts[login].blockedUntil = Date.now() + BLOCK_TIME * 1000
+        console.warn(`Логин ${login} заблокирован на ${BLOCK_TIME / 60} минут`)
+    }
+}
+
 // Ввод пароля с клавиатуры
 async function promptInput(question, hideInput = false) {
     return new Promise((resolve) => {
@@ -77,10 +94,28 @@ router.post("/login", async (req, res) => {
     const users = loadUsers();
     const user = users.find((u) => u.login === login);
 
-    if (!user) return res.status(401).json({ error: "Неверный логин или пароль" })
+    const attempt = loginAttempts[login]
+    const now = Date.now()
+
+    if (attempt && attempt.blockedUntil && now < attempt.blockedUntil) {
+        const waitSec = Math.ceil((attempt.blockedUntil - now) / 1000)
+        return res.status(429).json({error: `Слишком много попыток. Попробуйте через ${waitSec} секунд`})
+    }
+
+    if (!user) {
+        recordFiledAttempt(login)
+        return res.status(401).json({ error: "Неверный логин или пароль" })
+    }
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(401).json({ error: "Неверный логин или пароль" })
+    if (!match) {
+        recordFiledAttempt(login)
+        return res.status(401).json({ error: "Неверный логин или пароль" })
+    }
+
+    if (loginAttempts[login]) {
+        delete loginAttempts[login]
+    }
 
     const token = jwt.sign({ login: user.login, role: user.role }, SECRET_KEY, { expiresIn: "2h" })
     res.json({ token, role: user.role });

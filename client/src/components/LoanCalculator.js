@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { calculateLoan, fetchLoanTypes } from "../server-api";
 import LoanForm from "./LoanForm";
 import LoanResults from "./LoanResults";
+import { handleClickGA } from "./GA";
+import { Helmet } from "react-helmet-async";
 
 const LoanCalculator = () => {
     const [calculators, setCalculators] = useState([])
@@ -40,19 +42,32 @@ const LoanCalculator = () => {
         setLoading(true)
         setError(null)
 
+        handleClickGA({
+            category: 'LoanCalculator',
+            action: 'CalculateLoan Click',
+            label: 'CalculateLoan Button'
+        })
+
         calculateLoan(selectedType, loanData.amount, loanData.termYears)
             .then((data) => {
                 setResults(data)
+                setLoading(false)
             })
             .catch((error) => {
                 setResults(null)
                 setError(error.message)
+                setLoading(false)
             })
-        setLoading(false)
     }
 
     return (
         <div>
+            <Helmet>
+                <title>Кредитный калькулятор - расчёт кредита онлайн</title>
+                <meta name='description' content='Узнайте примерный платёж, ставку и другие предварительные условия по кредитам'/>
+                <meta property="og:title" content='Кредитный калькулятор онлайн' />
+                <meta property='og:description' content='Быстрый расчёт платежей и ставок по кредитам в вашем браузере.' />
+            </Helmet>
             <div className="gray-bg">
                 <div className="container">
                     <h1>Кредитный калькулятор</h1>
